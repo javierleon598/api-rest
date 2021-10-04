@@ -1,5 +1,6 @@
-package com.leantech.testapi.entity;
+package com.leantech.testapi.dto;
 
+import com.leantech.testapi.entity.Candidate;
 
 public class Employees {
     

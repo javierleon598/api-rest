@@ -3,7 +3,7 @@ package com.leantech.testapi.service;
 import java.util.List;
 
 import com.leantech.testapi.entity.Employee;
-import com.leantech.testapi.entity.Employees;
+import com.leantech.testapi.dto.Employees;
 
 public interface IEmployeeService {
 
@@ -13,6 +13,6 @@ public interface IEmployeeService {
 
     void deleteEmployee(String id);
 
-    // List<Employees> getEmployeesByFilter(String position,String name);
+    List<Employees> getEmployeesByFilter(String position,String name);
 
 }

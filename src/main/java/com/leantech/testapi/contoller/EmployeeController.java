@@ -2,9 +2,8 @@ package com.leantech.testapi.contoller;
 
 import java.util.List;
 
-
 import com.leantech.testapi.entity.Employee;
-import com.leantech.testapi.entity.Employees;
+import com.leantech.testapi.dto.Employees;
 import com.leantech.testapi.service.IEmployeeService;
 
 
@@ -27,8 +26,16 @@ public class EmployeeController {
     IEmployeeService employeeService;
 
     @GetMapping("/employee")
-    public List<Employees> getEmployees(){
-        return employeeService.getEmployees();
+    public List<Employees> getEmployees(@RequestParam(required = false, value = "position") String position,@RequestParam(required = false, value = "name") String name){
+        if(name == null){
+            if(position == null){
+                return employeeService.getEmployees();
+            }else{
+                return employeeService.getEmployeesByFilter(position,name);
+            }
+        }else{
+            return employeeService.getEmployeesByFilter(position,name);
+        }
     }
 
     @PostMapping("/employee")
@@ -48,10 +55,5 @@ public class EmployeeController {
 		employeeService.deleteEmployee(id);
 		return "Employee Deleted";
 	}
-
-    // @GetMapping("/employee")
-    // public List<Employees> getEmployees(@RequestParam("position") String position,@RequestParam("name") String name){
-    //     return employeeService.getEmployeesByFilter(position,name);
-    // }
     
 }

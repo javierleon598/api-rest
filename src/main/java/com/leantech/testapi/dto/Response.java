@@ -1,4 +1,4 @@
-package com.leantech.testapi.entity;
+package com.leantech.testapi.dto;
 
 import java.util.List;
 
