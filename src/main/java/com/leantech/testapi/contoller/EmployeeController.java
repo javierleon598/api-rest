@@ -3,7 +3,7 @@ package com.leantech.testapi.contoller;
 import java.util.List;
 
 import com.leantech.testapi.entity.Employee;
-import com.leantech.testapi.dto.Employees;
+import com.leantech.testapi.dto.Response;
 import com.leantech.testapi.service.IEmployeeService;
 
 
@@ -26,7 +26,7 @@ public class EmployeeController {
     IEmployeeService employeeService;
 
     @GetMapping("/employee")
-    public List<Employees> getEmployees(@RequestParam(required = false, value = "position") String position,@RequestParam(required = false, value = "name") String name){
+    public List<Response> getEmployees(@RequestParam(required = false, value = "position") String position,@RequestParam(required = false, value = "name") String name){
         if(name == null){
             if(position == null){
                 return employeeService.getEmployees();

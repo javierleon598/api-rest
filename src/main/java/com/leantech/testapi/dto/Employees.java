@@ -6,7 +6,6 @@ public class Employees {
     
     private Integer id;
     private String salary;
-    private String name;
     private Candidate person;
     
     public Employees(){}
@@ -25,14 +24,6 @@ public class Employees {
 
     public void setSalary(String salary){
         this.salary = salary;
-    }
-
-    public String getName(){
-        return name;
-    }
-
-    public void setName(String name){
-        this.name = name;
     }
 
     public Candidate getPerson(){

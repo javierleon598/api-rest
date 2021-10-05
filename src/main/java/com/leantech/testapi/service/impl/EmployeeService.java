@@ -1,11 +1,13 @@
 package com.leantech.testapi.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.leantech.testapi.entity.Employee;
 import com.leantech.testapi.dto.Employees;
-// import com.leantech.testapi.entity.Response;
+import com.leantech.testapi.dto.Response;
 import com.leantech.testapi.repository.CandidateRepository;
 import com.leantech.testapi.repository.EmployeeRepository;
 import com.leantech.testapi.repository.PositionRepository;
@@ -38,19 +40,58 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public List<Employees> getEmployees(){
+    public List<Response> getEmployees(){
+        
         List<Employee> employeeList = (List<Employee>) employeeRepository.findAll();
-        // List<Response> response = new ArrayList<Response>();
+
+        Map<String, List<Employee>> map = new HashMap<String, List<Employee>>();
+
+        for (Employee employee : employeeList) {
+            String key  = employee.getPosition().getName();
+            if(map.containsKey(key)){
+                List<Employee> list = map.get(key);
+                list.add(employee);
+
+            }else{
+                List<Employee> list = new ArrayList<Employee>();
+                list.add(employee);
+                map.put(key, list);
+            }
+        }
+
         List<Employees> employeesList = new ArrayList<Employees>();
         for (Employee employee : employeeList) {
             Employees employees = new Employees();
             employees.setId(employee.getId());
             employees.setSalary(employee.getSalary());
             employees.setPerson(employee.getPerson());
-            employees.setName(employee.getPosition().getName());
+            // employees.setName(employee.getPosition().getName());
             employeesList.add(employees);
         }
-        return employeesList;
+
+        List<Response> response = new ArrayList<Response>();
+        for (Map.Entry<String, List<Employee>> employee : map.entrySet()) {
+            Response responseT = new Response();
+            List<Employees> employeesListT = new ArrayList<Employees>();
+            for (Employee employeeT : employee.getValue()) {
+                
+                Employees employees = new Employees();
+                employees.setId(employeeT.getId());
+                employees.setSalary(employeeT.getSalary());
+                employees.setPerson(employeeT.getPerson());
+                employeesListT.add(employees);
+
+                responseT.setId(employeeT.getPosition().getId());
+                responseT.setName(employee.getKey());
+            }
+            responseT.setEmployees(employeesListT);
+            response.add(responseT);
+        }
+
+        System.out.println(map.toString());
+    
+        // return employeesList;
+        return response;
     }
 
     @Override
@@ -59,9 +100,24 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public List<Employees> getEmployeesByFilter(String position,String name) {
+    public List<Response> getEmployeesByFilter(String position,String name) {
         List<Employee> employeeList = (List<Employee>) employeeRepository.findAll();
-        
+
+        Map<String, List<Employee>> map = new HashMap<String, List<Employee>>();
+
+        for (Employee employee : employeeList) {
+            String key  = employee.getPosition().getName();
+            if(map.containsKey(key)){
+                List<Employee> list = map.get(key);
+                list.add(employee);
+
+            }else{
+                List<Employee> list = new ArrayList<Employee>();
+                list.add(employee);
+                map.put(key, list);
+            }
+        }
+
         List<Employees> employeesList = new ArrayList<Employees>();
         for (Employee employee : employeeList) {
             Employees employees = new Employees();
@@ -69,11 +125,36 @@ public class EmployeeService implements IEmployeeService {
                 employees.setId(employee.getId());
                 employees.setSalary(employee.getSalary());
                 employees.setPerson(employee.getPerson());
-                employees.setName(employee.getPosition().getName());
+                // employees.setName(employee.getPosition().getName());
                 employeesList.add(employees);
             }
         }
-        return employeesList;
+
+        List<Response> response = new ArrayList<Response>();
+        for (Map.Entry<String, List<Employee>> employee : map.entrySet()) {
+            Response responseT = new Response();
+            List<Employees> employeesListT = new ArrayList<Employees>();
+            for (Employee employeeT : employee.getValue()) {
+                
+                Employees employees = new Employees();
+                if(employeeT.getPosition().getName().equals(position) || employeeT.getPerson().getName().equals(name)){
+                    employees.setId(employeeT.getId());
+                    employees.setSalary(employeeT.getSalary());
+                    employees.setPerson(employeeT.getPerson());
+                    employeesListT.add(employees);
+                }
+
+                responseT.setId(employeeT.getPosition().getId());
+                responseT.setName(employee.getKey());
+                responseT.setEmployees(employeesListT);
+            }
+            response.add(responseT);
+        }
+
+        System.out.println(map.toString());
+    
+        // return employeesList;
+        return response;
     }
 
 }
